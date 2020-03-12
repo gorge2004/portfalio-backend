@@ -1,10 +1,12 @@
 'use strict';
 
 module.exports = function(app){
-const todoList = require('./../controllers/todoListController');
+const todoList = require('./../controller/appController');
 
 app.route('/hero/:lang')
 .get(todoList.getHero);
-app.route('/');
+app.route('/jobs/:lang')
+.get(todoList.getJob);
+
 
 }
