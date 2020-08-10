@@ -1,4 +1,5 @@
 var sql = require("./../db.js");
+const { json } = require("body-parser");
 const querys = {};
 querys.getSection = function(req, response) {
     sql.query(
@@ -22,7 +23,9 @@ querys.getJobs = function(req, response) {
       " WHERE languages.lang = ? ORDER BY start_at ",
     req.params.lang,
     function(err, res) {
-      responseFunction(err, res, response)
+      console.log('res', res);
+
+      //responseFunction(err, res, response)
     }
   );
 }
@@ -35,10 +38,34 @@ querys.getSKills = function(req, response) {
       "WHERE portfolio.languages.lang = ? ",
     req.params.lang,
     function(err, res) {
-      responseFunction(err, res, response);
+      //responseFunction(err, res, response);
+      console.log('res', res);
+        return {err, res};
     }
   );
 };
+querys.allContent = function(req, response){
+  //console.log(querys.getSKills({params:{lang: 'es'}}, response) );
+  sql.query(
+    "SELECt portfolio.skills.Id , portfolio.skills.description ,  portfolio.skills.json_skill ,portfolio.languages.lang " +
+      "FROM portfolio.skills  " +
+      "INNER JOIN portfolio.languages " +
+      "ON  portfolio.skills.lang_id = portfolio.languages.Id " +
+      "WHERE portfolio.languages.lang = ? ;"+
+      "SELECT  jobs.id, title, start_at , finish_at, location, description, technical_specification, lang" +
+      " FROM  jobs" +
+      " INNER JOIN languages " +
+      "ON  jobs.lang_id = languages.Id" +
+      " WHERE languages.lang = ? ORDER BY start_at ;"
+      ,
+    [req.params.lang, req.params.lang],
+    function(err, res) {
+      responseFunction(err, res, response);
+      console.log('res', res);
+    });
+  }
+
+
 function responseFunction(error, res, response) {
  
     response.json({status: (error ? 500 : 200) ,error,res});

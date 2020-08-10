@@ -6,4 +6,5 @@ exports.getSection = sqlMethod.getSection ;
 exports.getJobs = sqlMethod.getJobs ;
 
 exports.getSkills = sqlMethod.getSKills ;
+exports.allContent = sqlMethod.allContent ;
 
